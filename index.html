@@ -2,21 +2,36 @@
 <html lang="hr">
 <head>
   <meta charset="UTF-8" />
-  <base href="/Nogometni-termin/">
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Nogometni termin — Online</title>
   <meta name="theme-color" content="#0f172a" />
-  <link rel="manifest" href="./manifest.webmanifest">
+
+  <!-- IMPORTANT for GitHub Pages repo path -->
+  <base href="/Nogometni-termin/">
+
+  <!-- PWA / icons (paths stay relative to base) -->
+  <link rel="manifest" href="./manifest.webmanifest" />
   <link rel="icon" href="./icons/icon-192.png" sizes="192x192" />
   <link rel="apple-touch-icon" href="./icons/icon-192.png" />
+
+  <!-- Tailwind (UI) -->
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gradient-to-b from-slate-50 to-white text-slate-800">
   <div id="root"></div>
+
+  <!-- Firebase CDN -->
   <script src="https://www.gstatic.com/firebasejs/10.13.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore-compat.js"></script>
+
+  <!-- React -->
   <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+
+  <!-- Babel so JSX from app.js runs on GitHub Pages -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <!-- Boot config (from URL or config.json) -->
   <script>
     window.__NT_BOOT__ = { firebaseConfig: null, groupId: "" };
     async function bootstrapConfig() {
@@ -37,7 +52,10 @@
       }
     }
   </script>
-  <script src="./app.js"></script>
+
+  <!-- Your app code (unchanged), but let Babel transpile JSX on the fly -->
+  <script type="text/babel" src="./app.js"></script>
+
   <script>
     (async () => { await bootstrapConfig(); window.START_APP && window.START_APP(); })();
     if ("serviceWorker" in navigator) {
