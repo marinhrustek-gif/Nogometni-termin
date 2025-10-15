@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Nogometni termin — Link generator</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-slate-50 text-slate-800">
+  <div class="mx-auto max-w-2xl p-6">
+    <h1 class="text-xl font-bold mb-4">Generator linka za dijeljenje</h1>
+    <p class="text-sm text-slate-600 mb-4">Zalijepite svoj Firebase <code>firebaseConfig</code> JSON i <strong>Group ID</strong>. Dobit ćete link koji možete poslati ekipi — otvara app i spaja sve na istu grupu.</p>
+    <label class="block text-sm font-medium mb-1">firebaseConfig (JSON)</label>
+    <textarea id="cfg" rows="8" class="w-full rounded-xl border p-2 font-mono text-xs mb-3" placeholder='{"apiKey":"...","authDomain":"...","projectId":"...","appId":"..."}'></textarea>
+    <label class="block text-sm font-medium mb-1">Group ID</label>
+    <input id="gid" class="w-full rounded-xl border p-2 mb-4" placeholder="npr. srijeda_termin" />
+    <button id="gen" class="rounded-xl border px-3 py-2 bg-slate-900 text-white">Generiraj link</button>
+    <div id="out" class="mt-4 text-sm break-all"></div>
+  </div>
+  <script>
+    document.getElementById('gen').onclick = () => {
+      try {
+        const cfg = JSON.parse(document.getElementById('cfg').value.trim());
+        const gid = document.getElementById('gid').value.trim();
+        if (!cfg || !gid) { alert('Unesite i config i Group ID.'); return; }
+        const b64 = btoa(JSON.stringify(cfg));
+        const url = location.origin + location.pathname.replace(/config\.html$/, 'index.html') + '?cfg=' + encodeURIComponent(b64) + '&g=' + encodeURIComponent(gid);
+        document.getElementById('out').innerHTML = '<div class="rounded-xl border p-3 bg-white">Vaš link:<br/><a class="text-blue-600 underline" href="'+url+'">'+url+'</a></div>';
+      } catch (e) { alert('Neispravan JSON.'); }
+    };
+  </script>
+</body>
+</html>

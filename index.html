@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Nogometni termin — Online</title>
+  <meta name="theme-color" content="#0f172a" />
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" href="./icons/icon-192.png" sizes="192x192" />
+  <link rel="apple-touch-icon" href="./icons/icon-192.png" />
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-b from-slate-50 to-white text-slate-800">
+  <div id="root"></div>
+  <script src="https://www.gstatic.com/firebasejs/10.13.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore-compat.js"></script>
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script>
+    window.__NT_BOOT__ = { firebaseConfig: null, groupId: "" };
+    async function bootstrapConfig() {
+      const params = new URLSearchParams(location.search);
+      const cfgParam = params.get("cfg");
+      const gParam = params.get("g");
+      if (cfgParam) { try { window.__NT_BOOT__.firebaseConfig = JSON.parse(atob(cfgParam)); } catch(e){} }
+      if (gParam) { window.__NT_BOOT__.groupId = gParam; }
+      if (!window.__NT_BOOT__.firebaseConfig || !window.__NT_BOOT__.groupId) {
+        try {
+          const res = await fetch("./config.json");
+          if (res.ok) {
+            const j = await res.json();
+            window.__NT_BOOT__.firebaseConfig = window.__NT_BOOT__.firebaseConfig || j.firebaseConfig || null;
+            window.__NT_BOOT__.groupId = window.__NT_BOOT__.groupId || j.groupId || "";
+          }
+        } catch(e){}
+      }
+    }
+  </script>
+  <script src="./app.js"></script>
+  <script>
+    (async () => { await bootstrapConfig(); window.START_APP && window.START_APP(); })();
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => { navigator.serviceWorker.register("./sw.js").catch(console.error); });
+    }
+  </script>
+</body>
+</html>
