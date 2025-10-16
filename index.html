@@ -62,5 +62,42 @@
       window.addEventListener("load", () => { navigator.serviceWorker.register("./sw.js").catch(console.error); });
     }
   </script>
+  <script type="text/babel">
+  async function bootstrapConfig() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const cfgParam = urlParams.get("cfg");
+    const groupId = urlParams.get("g");
+
+    if (!cfgParam) {
+      document.getElementById("root").innerHTML = `
+        <div class="flex justify-center items-center min-h-screen text-center text-slate-700">
+          <div>
+            <h1 class="text-2xl font-semibold mb-2">Nema konfiguracije</h1>
+            <p>Otvorite <a href="config.html" class="underline text-blue-600">config.html</a> da generirate link (Firebase + Group ID) i podijelite ga ekipi.</p>
+          </div>
+        </div>`;
+      return;
+    }
+
+    try {
+      const cfgDecoded = JSON.parse(atob(decodeURIComponent(cfgParam)));
+      return { firebaseConfig: cfgDecoded, groupId };
+    } catch (e) {
+      document.getElementById("root").innerHTML =
+        "<p class='text-center mt-20 text-red-600'>Greška u konfiguraciji linka.</p>";
+      return null;
+    }
+  }
+
+  async function boot() {
+    const config = await bootstrapConfig();
+if (!config) return;
+window.__NT_BOOT__ = config;   // <-- postavi globalno
+window.START_APP();            // <-- pokreni app
+
+  }
+  boot();
+</script>
+
 </body>
 </html>
